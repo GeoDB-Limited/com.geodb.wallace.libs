@@ -1,12 +1,10 @@
 import setuptools
 
-PACKAGE_NAME = 'wallace_libs'
-PACKAGE_DESCRIPTION = 'wallace_libs'
-PACKAGE_VERSION = '0.0.1'
+
 setuptools.setup(
-    name=PACKAGE_NAME,
-    version=PACKAGE_VERSION,
-    description=PACKAGE_DESCRIPTION,
+    name='wallace_libs',
+    version='0.0.1',
+    description='wallace_libs',
     install_requires=[],
-    packages=setuptools.find_packages(),
+    packages=["wallace_libs"],
 )

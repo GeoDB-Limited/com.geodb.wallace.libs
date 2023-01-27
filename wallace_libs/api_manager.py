@@ -6,21 +6,25 @@ import google.auth.transport.requests
 
 class ApiManager:
     def __init__(self):
-        self.timeout: int = 60
+        self._timeout: int = 60
+        self._token = None
 
     def request_post(
             self,
             endpoint: str,
-            token: object,
             data_instances: dict
     ) -> requests.Response:
+        if self._token is None:
+            self.get_auth_token()
+
         headers = {
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {token}"}
+            "Authorization": f"Bearer {self._token}"}
+
         res = requests.post(
             url=endpoint,
             data=json.dumps(data_instances),
-            timeout=self.timeout,
+            timeout=self._timeout,
             headers=headers)
         return res
 
@@ -28,20 +32,16 @@ class ApiManager:
             self,
             response: requests.Response,
             endpoint: str,
-            data: dict,
-            token: object
-    ) -> object:
+            data: dict
+    ):
         try:
             response.raise_for_status()
-            return token
         except requests.exceptions.HTTPError as e:
-            token: object = self.get_auth_token()
+            self._token = self.get_auth_token()
             r = self.request_post(
                 endpoint=endpoint,
-                token=self.get_auth_token(),
                 data_instances=data)
             r.raise_for_status()
-            return token
 
     def get_auth_token(self) -> object:
         creds, project = google.auth.default()

@@ -15,7 +15,7 @@ class ApiManager:
             data_instances: dict
     ) -> requests.Response:
         if self._token is None:
-            self.get_auth_token()
+            self._token = self.get_auth_token()
 
         headers = {
             "Content-Type": "application/json",
